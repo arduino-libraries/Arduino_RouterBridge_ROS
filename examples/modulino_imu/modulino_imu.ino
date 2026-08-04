@@ -22,10 +22,7 @@ float x, y, z;
 float roll, pitch, yaw;
 
 void setup() {
-    Serial1.begin(115200);
     Bridge.begin();
-    Monitor.begin(115200);
-
     Modulino.begin(Wire1);
     movement.begin();
 
@@ -46,23 +43,17 @@ void loop() {
     pitch = movement.getPitch();
     yaw = movement.getYaw();
 
-    Serial1.println(String(x)+" "+String(y)+" "+String(z));
-
-
-
     if (imu_pub != nullptr) {
         // 1. Prepare sub-messages
         std_msgs::msg::Header header;
-        header.stamp.sec = millis() / 1000;
-        header.stamp.nanosec = (millis() % 1000) * 1000000;
+        header.stamp = builtin_interfaces::msg::Time();
         header.frame_id = "imu_link";
 
         geometry_msgs::msg::Quaternion orientation;
         orientation.x = 0.0; orientation.y = 0.0; orientation.z = 0.0; orientation.w = 1.0;
 
-        std::vector<double> covariance = {0.01, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.01};
-        
-        
+        std::array<double, 9> covariance = {0.01, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.01};
+
         geometry_msgs::msg::Vector3 angular_velocity;
         angular_velocity.x = 0.00; angular_velocity.y = 0.0; angular_velocity.z = 0.0;
 
@@ -70,7 +61,11 @@ void loop() {
         linear_acceleration.x = x; linear_acceleration.y = y; linear_acceleration.z = z; // Gravity
 
         // 2. Instantiate the IMU struct using your defined constructor
-        sensor_msgs::msg::Imu imu_msg(header, orientation, angular_velocity, linear_acceleration);
+        sensor_msgs::msg::Imu imu_msg;
+        imu_msg.header = header;
+        imu_msg.orientation = orientation;
+        imu_msg.angular_velocity = angular_velocity;
+        imu_msg.linear_acceleration = linear_acceleration;
         imu_msg.linear_acceleration_covariance = covariance;
         imu_msg.orientation_covariance = covariance;
         imu_msg.angular_velocity_covariance = covariance;
@@ -82,5 +77,4 @@ void loop() {
         imu_pub->publish(&imu_msg);
     }
 
-    delay(10); // Publish at roughly 100 Hz
 }
