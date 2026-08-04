@@ -1,0 +1,46 @@
+/*
+    This file is part of the Arduino_RouterBridge_ROS library.
+
+    Copyright (c) Arduino s.r.l. and/or its affiliated companies
+
+    This Source Code Form is subject to the terms of the Mozilla Public
+    License, v. 2.0. If a copy of the MPL was not distributed with this
+    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+*/
+
+#ifndef ROUTERBRIDGE_ROS_GEOMETRY_MSGS_POLYGONSTAMPED_H
+#define ROUTERBRIDGE_ROS_GEOMETRY_MSGS_POLYGONSTAMPED_H
+#include <MsgPack.h>
+
+#include "Polygon.h"
+#include "../std_msgs/Header.h"
+
+#define ROUTERBRIDGE_ROS_GEOMETRY_MSGS_POLYGONSTAMPED "geometry_msgs/msg/PolygonStamped"
+
+namespace geometry_msgs {
+
+namespace msg {
+
+    struct PolygonStamped {
+        static constexpr const char* _type = ROUTERBRIDGE_ROS_GEOMETRY_MSGS_POLYGONSTAMPED;
+
+        MsgPack::str_t key1 = "header";
+        std_msgs::msg::Header header;
+
+        MsgPack::str_t key2 = "polygon";
+        Polygon polygon;
+
+        PolygonStamped() = default;
+
+        PolygonStamped(std_msgs::msg::Header header, Polygon polygon): header(header), polygon(polygon) {}
+
+        MSGPACK_DEFINE_MAP(key1, header, key2, polygon);
+
+        bool operator==(const PolygonStamped& other) const { return this->header == other.header && this->polygon == other.polygon; }
+    };
+
+} // namespace msg
+
+} // namespace geometry_msgs
+#endif //ROUTERBRIDGE_ROS_GEOMETRY_MSGS_POLYGONSTAMPED_H
