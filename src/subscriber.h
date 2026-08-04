@@ -17,7 +17,7 @@
 
 #define ROS2_SUBSCRIBE_TOPIC_CALL "ros2/sub"
 
-namespace ros2bridge
+namespace ros2ino
 {
     class SubscriberInterface {
     public:

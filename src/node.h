@@ -15,7 +15,7 @@
 #include "publisher.h"
 #include "subscriber.h"
 
-namespace ros2bridge {
+namespace ros2ino {
 
 class Node {
 

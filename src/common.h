@@ -112,7 +112,7 @@
 #include "sensor_msgs/Temperature.h"
 #include "sensor_msgs/TimeReference.h"
 
-namespace ros2bridge
+namespace ros2ino
 {
 
     typedef void(*CallBack)(void* msg, void* arg);

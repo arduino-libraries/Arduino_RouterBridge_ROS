@@ -18,7 +18,7 @@
 #define ROS2_PUBLISH_CALL "ros2/pub"
 #define ROS2_REGISTER_TOPIC_CALL "ros2/reg"
 
-namespace ros2bridge {
+namespace ros2ino {
 
 class PublisherInterface {
 

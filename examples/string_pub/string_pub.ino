@@ -24,14 +24,14 @@ void publishStr(std_msgs::msg::String *val, void* arg)
     val->data = msg + String(cnt++);
 }
 
-class StrPub : public ros2bridge::Node
+class StrPub : public ros2ino::Node
 {
 public:
     StrPub()
     : Node("str_pub_node")
     {
-        ros2bridge::Publisher<std_msgs::msg::String>* publisher_ = this->create_publisher<std_msgs::msg::String>("simple_string");
-        this->create_wall_timer(PUBLISH_INTERVAL_MS, (ros2bridge::CallBack)publishStr, nullptr, publisher_);
+        ros2ino::Publisher<std_msgs::msg::String>* publisher_ = this->create_publisher<std_msgs::msg::String>("simple_string");
+        this->create_wall_timer(PUBLISH_INTERVAL_MS, (ros2ino::CallBack)publishStr, nullptr, publisher_);
     }
 };
 
@@ -44,7 +44,7 @@ void setup()
 void loop()
 {
     static StrPub node;
-    ros2bridge::spin(&node);
+    ros2ino::spin(&node);
 
     static unsigned long last_serial_print = 0;
     if (millis() - last_serial_print > 5000)

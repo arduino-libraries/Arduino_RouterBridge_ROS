@@ -21,14 +21,14 @@ void publishInt(std_msgs::msg::Int32 *val, void* arg)
     *val = cnt++;
 }
 
-class IntPub : public ros2bridge::Node
+class IntPub : public ros2ino::Node
 {
 public:
     IntPub()
     : Node("int_pub_node")
     {
-        ros2bridge::Publisher<std_msgs::msg::Int32>* publisher_ = this->create_publisher<std_msgs::msg::Int32>("simple_counter");
-        this->create_wall_timer(PUBLISH_INTERVAL_MS, (ros2bridge::CallBack)publishInt, nullptr, publisher_);
+        ros2ino::Publisher<std_msgs::msg::Int32>* publisher_ = this->create_publisher<std_msgs::msg::Int32>("simple_counter");
+        this->create_wall_timer(PUBLISH_INTERVAL_MS, (ros2ino::CallBack)publishInt, nullptr, publisher_);
     }
 };
 
@@ -41,7 +41,7 @@ void setup()
 void loop()
 {
     static IntPub node;
-    ros2bridge::spin(&node);
+    ros2ino::spin(&node);
 
     static unsigned long last_serial_print = 0;
     if (millis() - last_serial_print > 5000)

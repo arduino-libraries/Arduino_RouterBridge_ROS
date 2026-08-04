@@ -19,13 +19,13 @@ void chatterCallback(std_msgs::msg::String* msg, void* arg) {
     (void)arg;
 }
 
-class StringSub : public ros2bridge::Node {
+class StringSub : public ros2ino::Node {
 public:
     StringSub()
     : Node("str_sub_node")
     {
-        ros2bridge::Subscriber<std_msgs::msg::String>* subscription_ = this->create_subscription<std_msgs::msg::String>("/chatter",
-            (ros2bridge::CallBack)chatterCallback,
+        ros2ino::Subscriber<std_msgs::msg::String>* subscription_ = this->create_subscription<std_msgs::msg::String>("/chatter",
+            (ros2ino::CallBack)chatterCallback,
             nullptr
             );
 
@@ -44,7 +44,7 @@ void setup() {
 
 void loop() {
     static StringSub node;
-    ros2bridge::spin(&node);
+    ros2ino::spin(&node);
 
     static unsigned long last_serial_print = 0;
     if (millis() - last_serial_print > 5000)
