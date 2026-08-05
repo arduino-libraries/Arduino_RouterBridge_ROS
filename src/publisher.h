@@ -23,7 +23,7 @@ namespace ros2ino {
 class PublisherInterface {
 
 public:
-    PublisherInterface(): _id(0), is_registered(false), pub_msg_cnt_(0), use_zephyr_time(false) {}
+    PublisherInterface(): _id(0), is_registered(false), pub_msg_cnt_(0) {}
     virtual ~PublisherInterface()= default;
 
     virtual void register_() = 0;
@@ -45,17 +45,11 @@ public:
         return (millis() - last_publish_time_) > publish_interval_;
     }
 
-    void setUseZephyrTime(bool use_zephyr_time)
-    {
-        this->use_zephyr_time = use_zephyr_time;
-    }
-
 protected:
     CallBack callback_=nullptr;
     void* callback_arg_=nullptr;
     uint16_t _id;
     bool is_registered;
-    bool use_zephyr_time;
     uint32_t pub_msg_cnt_;
     const char* topic_name_=nullptr;
     unsigned long publish_interval_=0;
@@ -66,18 +60,10 @@ template <typename MsgType>
 class Publisher: public PublisherInterface{
 
 public:
-    explicit Publisher(const char* topic_name) {
+    Publisher(const char* topic_name, const bool use_publisher_timestamps = true) {
+        this->use_publisher_timestamps = use_publisher_timestamps;
         topic_name_ = topic_name;
         Publisher<MsgType>::register_();
-    }
-
-    void register_() override {
-        int assigned_id;
-        MsgPack::str_t time_mode;
-        use_zephyr_time ? time_mode = "" : time_mode = "o";
-        is_registered = Bridge.call(ROS2_REGISTER_TOPIC_CALL, this->topic_name_, MsgType::_type, time_mode).result(assigned_id);
-        if (is_registered && assigned_id >= 0) this->_id = (uint16_t)assigned_id;
-        // TODO error check could be useful here
     }
 
     bool isRegistered() const {return is_registered;}
@@ -104,6 +90,17 @@ public:
     }
 
 private:
+    void register_() override {
+        int assigned_id;
+        MsgPack::str_t time_mode;
+        use_publisher_timestamps ? time_mode = "" : time_mode = "o";     // time_mode "o" to overwrite Time msg on arrival in ROS
+        is_registered = Bridge.call(ROS2_REGISTER_TOPIC_CALL, this->topic_name_, MsgType::_type, time_mode).result(assigned_id);
+        if (is_registered && assigned_id >= 0) this->_id = (uint16_t)assigned_id;
+        // TODO error check could be useful here
+    }
+
+    // set use_publisher_timestamps to false to let ROS2 overwrite Time messages associated with this publisher
+    bool use_publisher_timestamps;
     MsgType msg_;
 };
 
