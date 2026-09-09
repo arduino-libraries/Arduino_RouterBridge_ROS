@@ -46,7 +46,7 @@ void loop()
     static unsigned long last_serial_print = 0;
     if (millis() - last_serial_print > 5000)
     {
-        Monitor.print("int_pub running");
+        Monitor.println("int_pub running");
         last_serial_print = millis();
     }
 

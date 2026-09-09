@@ -65,7 +65,7 @@ void loop() {
     // Heartbeat for the Monitor tool
     static unsigned long last_print = 0;
     if (millis() - last_print > 5000) {
-        Monitor.print("Combined node is spinning...");
+        Monitor.println("Combined node is spinning...");
         last_print = millis();
     }
 }
