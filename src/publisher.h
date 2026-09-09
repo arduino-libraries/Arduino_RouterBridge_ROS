@@ -84,10 +84,9 @@ public:
 
     void publish() override {
         if (!is_registered) return;
-        if (callback_ != nullptr)
-        {
-            callback_(&msg_, callback_arg_);
-        }
+        if (callback_ == nullptr) return;
+
+        callback_(&msg_, callback_arg_);
         this->publish(&msg_);
     }
 
