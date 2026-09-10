@@ -16,6 +16,7 @@
 #define ROUTERBRIDGE_ROS_SUB_MAX 10
 
 // types
+// standard
 #include "std_msgs/Bool.h"
 #include "std_msgs/Byte.h"
 #include "std_msgs/ByteMultiArray.h"
@@ -111,6 +112,8 @@
 #include "sensor_msgs/RelativeHumidity.h"
 #include "sensor_msgs/Temperature.h"
 #include "sensor_msgs/TimeReference.h"
+// qos
+#include "qos/QoS.h"
 
 namespace ros2ino
 {
