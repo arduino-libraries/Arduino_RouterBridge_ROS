@@ -117,6 +117,12 @@ namespace ros2ino
 
     typedef void(*CallBack)(void* msg, void* arg);
 
+    inline bool available()
+    {
+        bool is_ready = false;
+        return Bridge.call("ros2/ready").result(is_ready) && is_ready;
+    }
+
 }
 
 #endif //ROUTERBRIDGE_ROS_COMMON_H
