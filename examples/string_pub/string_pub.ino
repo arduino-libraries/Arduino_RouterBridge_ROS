@@ -39,6 +39,8 @@ void setup()
 {
     Bridge.begin();
     Monitor.begin(115200);
+
+    if (!ros2ino::available()) {Monitor.println("No ROS2 proxy available"); delay(1000);}
 }
 
 void loop()
