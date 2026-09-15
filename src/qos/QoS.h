@@ -95,6 +95,11 @@ namespace ros2ino {
 
         };
 
+        inline QoS default_qos = QoS(10)
+            .history(HistoryPolicy::KeepLast)
+            .reliability(ReliabilityPolicy::Reliable)
+            .durability(DurabilityPolicy::Volatile);
+
 } // namespace ros2ino
 
 #endif //ROUTERBRIDGE_ROS_QOS_H

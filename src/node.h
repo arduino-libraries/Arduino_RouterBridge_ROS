@@ -32,13 +32,13 @@ public:
     explicit Node(const char* name, const char* node_namespace = "/"): name_(name), node_namespace_(node_namespace){}
 
     template <typename MsgType>
-    Publisher<MsgType>* create_publisher(const char* topic_name, bool use_publisher_timestamps=true) {
+    Publisher<MsgType>* create_publisher(const char* topic_name, const QoS* qos_profile=nullptr, bool use_publisher_timestamps=true) {
 
         for (int i=0; i<ROUTERBRIDGE_ROS_PUB_MAX; ++i)
         {
             if (pub_list[i] == nullptr)
             {
-                auto* pub_ptr = new Publisher<MsgType>(topic_name, use_publisher_timestamps);
+                auto* pub_ptr = new Publisher<MsgType>(topic_name, qos_profile, use_publisher_timestamps);
                 if (!pub_ptr->isRegistered()) return nullptr;
                 pub_list[i] = pub_ptr;
                 return (Publisher<MsgType>*)pub_list[i];
