@@ -1,5 +1,5 @@
 # ⚠️ Arduino_RouterBridge_ROS
-> ⚠️ This library is WIP  
+> 🚧 **WORK IN PROGRESS (WIP)**
 
 Arduino library to interface to ROS 2 through Arduino Router
 
