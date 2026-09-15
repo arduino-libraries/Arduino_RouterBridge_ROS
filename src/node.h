@@ -29,7 +29,10 @@ class Node {
     const char* node_namespace_;
 
 public:
-    explicit Node(const char* name, const char* node_namespace = "/"): name_(name), node_namespace_(node_namespace){}
+    explicit Node(const char* name, const char* node_namespace = "/"): name_(name), node_namespace_(node_namespace)
+    {
+        ros2ino::reset();
+    }
 
     template <typename MsgType>
     Publisher<MsgType>* create_publisher(const char* topic_name, const QoS* qos_profile=nullptr, bool use_publisher_timestamps=true) {
