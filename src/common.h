@@ -15,6 +15,9 @@
 #define ROUTERBRIDGE_ROS_PUB_MAX 10
 #define ROUTERBRIDGE_ROS_SUB_MAX 10
 
+#define ROS2_READY_CALL "ros2/ready"
+#define ROS2_RESET_CALL "ros2/reset"
+
 // types
 #include "std_msgs/Bool.h"
 #include "std_msgs/Byte.h"
@@ -120,7 +123,12 @@ namespace ros2ino
     inline bool available()
     {
         bool is_ready = false;
-        return Bridge.call("ros2/ready").result(is_ready) && is_ready;
+        return Bridge.call(ROS2_READY_CALL).result(is_ready) && is_ready;
+    }
+
+    inline bool reset()
+    {
+        return Bridge.call(ROS2_RESET_CALL).result();
     }
 
 }
