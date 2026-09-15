@@ -1,9 +1,5 @@
 # ⚠️ Arduino_RouterBridge_ROS
 > ⚠️ This library is WIP  
-> At the moment Arduino_RouterBridge_ROS is only compatible with versions of the `arduino-router` that include:  
->[#60](https://github.com/arduino/arduino-router/pull/60)  
->[#62](https://github.com/arduino/arduino-router/pull/62)  
-> As for example this RC: [v0.10.0-rc.1](https://github.com/arduino/arduino-router/releases/tag/v0.10.0-rc.1)
 
 Arduino library to interface to ROS 2 through Arduino Router
 
