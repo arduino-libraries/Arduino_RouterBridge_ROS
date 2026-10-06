@@ -19,6 +19,7 @@
 #include <time.h>
 #include "publisher.h"
 #include "subscriber.h"
+#include "service.h"
 #include "builtin_interfaces/Time.h"
 
 namespace ros2ino {
@@ -32,6 +33,23 @@ public:
     explicit Node(const char* name, const char* node_namespace = "/"): name_(name), node_namespace_(node_namespace)
     {
         ros2ino::reset();
+    }
+
+    template <typename SrvType>
+    Service<SrvType>* create_service(const char* service_name, ServiceCallback callback, void* callback_arg, bool use_service_timestamps=true) {
+
+        for (int i=0; i<ROUTERBRIDGE_ROS_SRV_MAX; i++)
+        {
+            if (srv_list[i] == nullptr)
+            {
+                auto* srv_ptr = new Service<SrvType>(service_name, callback, callback_arg, use_service_timestamps);
+                if (!srv_ptr->isRegistered()) return nullptr;
+                srv_list[i] = srv_ptr;
+                return (Service<SrvType>*)srv_list[i];
+            }
+        }
+
+        return nullptr;
     }
 
     template <typename MsgType>
@@ -182,6 +200,7 @@ public:
 private:
     PublisherInterface* pub_list[ROUTERBRIDGE_ROS_PUB_MAX];
     SubscriberInterface* sub_list[ROUTERBRIDGE_ROS_SUB_MAX];
+    ServiceInterface* srv_list[ROUTERBRIDGE_ROS_SRV_MAX];
 };
 
 inline void spin(Node* node) {

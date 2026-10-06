@@ -14,6 +14,7 @@
 
 #define ROUTERBRIDGE_ROS_PUB_MAX 10
 #define ROUTERBRIDGE_ROS_SUB_MAX 10
+#define ROUTERBRIDGE_ROS_SRV_MAX 10
 
 #define ROS2_READY_CALL "ros2/ready"
 #define ROS2_RESET_CALL "ros2/reset"
@@ -119,6 +120,8 @@ namespace ros2ino
 {
 
     typedef void(*CallBack)(void* msg, void* arg);
+
+    typedef void(*ServiceCallback)(void* req, void* resp, void* arg);
 
     inline bool available()
     {
