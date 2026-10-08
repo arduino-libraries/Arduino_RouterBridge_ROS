@@ -18,7 +18,7 @@ void publishInt(std_msgs::msg::Int32 *val, void* arg)
     (void)arg;
 
     static int cnt = 0;
-    *val = cnt++;
+    val->data = cnt++;
 }
 
 class IntPub : public ros2ino::Node
