@@ -1,5 +1,5 @@
 /*
-This file is part of the Arduino_RouterBridge_ROS library.
+    This file is part of the Arduino_RouterBridge_ROS library.
 
     Copyright (c) Arduino s.r.l. and/or its affiliated companies
 
@@ -45,7 +45,7 @@ void loop()
     static unsigned long last_serial_print = 0;
     if (millis() - last_serial_print > 5000)
     {
-        Serial.print("adder_srv running");
+        Serial.println("adder_srv running");
         last_serial_print = millis();
     }
 

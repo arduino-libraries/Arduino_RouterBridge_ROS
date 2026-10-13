@@ -20,6 +20,7 @@
 #include "publisher.h"
 #include "subscriber.h"
 #include "service.h"
+#include "client.h"
 #include "builtin_interfaces/Time.h"
 
 namespace ros2ino {
@@ -46,6 +47,23 @@ public:
                 if (!srv_ptr->isRegistered()) return nullptr;
                 srv_list[i] = srv_ptr;
                 return (Service<SrvType>*)srv_list[i];
+            }
+        }
+
+        return nullptr;
+    }
+
+    template <typename SrvType>
+    Client<SrvType>* create_client(const char* service_name)
+    {
+        for (int i=0; i<ROUTERBRIDGE_ROS_SRV_MAX; i++)
+        {
+            if (cli_list[i] == nullptr)
+            {
+                auto* cli_ptr = new Client<SrvType>(service_name);
+                if (!cli_ptr->isRegistered()) return nullptr;
+                cli_list[i] = cli_ptr;
+                return (Client<SrvType>*)cli_list[i];
             }
         }
 
@@ -201,6 +219,7 @@ private:
     PublisherInterface* pub_list[ROUTERBRIDGE_ROS_PUB_MAX];
     SubscriberInterface* sub_list[ROUTERBRIDGE_ROS_SUB_MAX];
     ServiceInterface* srv_list[ROUTERBRIDGE_ROS_SRV_MAX];
+    ClientInterface* cli_list[ROUTERBRIDGE_ROS_SRV_CLI_MAX];
 };
 
 inline void spin(Node* node) {
