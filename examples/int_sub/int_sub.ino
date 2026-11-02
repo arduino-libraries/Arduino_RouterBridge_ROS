@@ -12,36 +12,34 @@
 #include <Arduino_RouterBridge_ROS.h>
 
 void intCallback(std_msgs::msg::Int16* msg, void* arg) {
-    Monitor.print("I got data: int ");
-    Monitor.print(msg->data);
-    Monitor.println("");
+    Serial.print("I got data: int ");
+    Serial.print(msg->data);
+    Serial.println("");
 
     (void)arg;
 }
 
 class IntSub : public ros2ino::Node {
 public:
-    IntSub()
-    : Node("str_sub_node")
-    {
-        ros2ino::Subscriber<std_msgs::msg::Int16>* subscription_ = this->create_subscription<std_msgs::msg::Int16>("/chatter",
+    IntSub() : Node("str_sub_node") {
+        ros2ino::Subscriber<std_msgs::msg::Int16>* subscription_ = this->create_subscription<std_msgs::msg::Int16>("/simple_counter",
             (ros2ino::CallBack)intCallback,
             nullptr
             );
 
         if (subscription_ != nullptr) {
-            Monitor.println("Successfully subscribed!");
+            Serial.println("Successfully subscribed!");
         } else {
-            Monitor.println("Failed to subscribe (List full or Bridge error).");
+            Serial.println("Failed to subscribe (List full or Bridge error).");
         }
     }
 };
 
 void setup() {
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
 
-    if (!ros2ino::available()) {Monitor.println("No ROS2 proxy available"); delay(1000);}
+    while (!ros2ino::available()) { Serial.println("No ROS 2 proxy available"); delay(1000); }
 }
 
 void loop() {
@@ -49,9 +47,8 @@ void loop() {
     ros2ino::spin(&node);
 
     static unsigned long last_serial_print = 0;
-    if (millis() - last_serial_print > 5000)
-    {
-        Monitor.print("int_sub running");
+    if (millis() - last_serial_print > 5000) {
+        Serial.print("int_sub running");
         last_serial_print = millis();
     }
 }

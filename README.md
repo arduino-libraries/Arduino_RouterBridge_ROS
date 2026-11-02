@@ -14,9 +14,9 @@ Arduino library to interface to ROS 2 through Arduino Router
 
 ## ✅ Prerequisites
 
-ROS2 Jazzy must be installed and sourced on the Linux side  
+ROS 2 Jazzy must be installed and sourced on the Linux side  
 The library is based on [Arduino_RouterBridge](https://github.com/arduino-libraries/Arduino_RouterBridge.git) so an instance of arduino-router.service must be running  
-An arduino_proxy ROS2 node must be running via the following command
+An arduino_proxy ROS 2 node must be running via the following command
 
 ```bash
 ros2 run arduino_router_ros arduino_proxy
