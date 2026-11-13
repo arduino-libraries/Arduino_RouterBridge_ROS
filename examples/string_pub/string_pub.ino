@@ -13,8 +13,7 @@
 
 #define PUBLISH_INTERVAL_MS 100
 
-void publishStr(std_msgs::msg::String *val, void* arg)
-{
+void publishStr(std_msgs::msg::String *val, void* arg) {
     (void)arg;
 
     static int cnt = 0;
@@ -24,35 +23,28 @@ void publishStr(std_msgs::msg::String *val, void* arg)
     val->data = msg + String(cnt++);
 }
 
-class StrPub : public ros2ino::Node
-{
+class StrPub : public ros2ino::Node {
 public:
-    StrPub()
-    : Node("str_pub_node")
-    {
-        ros2ino::Publisher<std_msgs::msg::String>* publisher_ = this->create_publisher<std_msgs::msg::String>("simple_string");
+    StrPub() : Node("str_pub_node") {
+        ros2ino::Publisher<std_msgs::msg::String>* publisher_ = this->create_publisher<std_msgs::msg::String>("chatter");
         this->create_wall_timer(PUBLISH_INTERVAL_MS, (ros2ino::CallBack)publishStr, nullptr, publisher_);
     }
 };
 
-void setup()
-{
+void setup() {
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
 
-    if (!ros2ino::available()) {Monitor.println("No ROS2 proxy available"); delay(1000);}
+    while (!ros2ino::available()) {Serial.println("No ROS 2 proxy available"); delay(1000);}
 }
 
-void loop()
-{
+void loop() {
     static StrPub node;
     ros2ino::spin(&node);
 
     static unsigned long last_serial_print = 0;
-    if (millis() - last_serial_print > 5000)
-    {
-        Monitor.print("string_pub running");
+    if (millis() - last_serial_print > 5000) {
+        Serial.print("string_pub running");
         last_serial_print = millis();
     }
-
 }
