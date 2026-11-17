@@ -60,9 +60,11 @@ template <typename MsgType>
 class Publisher: public PublisherInterface{
 
 public:
-    Publisher(const char* topic_name, const bool use_publisher_timestamps = true) {
+    Publisher(const char* topic_name, const QoS* qos = nullptr, const bool use_publisher_timestamps = true) {
         this->use_publisher_timestamps = use_publisher_timestamps;
         topic_name_ = topic_name;
+        if (qos == nullptr) qos = &ros2ino::default_qos;
+        qos_profile = qos;
         Publisher<MsgType>::register_();
     }
 
@@ -93,7 +95,7 @@ private:
         int assigned_id;
         MsgPack::str_t time_mode;
         use_publisher_timestamps ? time_mode = "" : time_mode = "o";     // time_mode "o" to overwrite Time msg on arrival in ROS
-        is_registered = Bridge.call(ROS2_REGISTER_TOPIC_CALL, this->topic_name_, MsgType::_type, time_mode).result(assigned_id);
+        is_registered = Bridge.call(ROS2_REGISTER_TOPIC_CALL, this->topic_name_, MsgType::_type, *qos_profile, time_mode).result(assigned_id);
         if (is_registered && assigned_id >= 0) this->_id = (uint16_t)assigned_id;
         // TODO error check could be useful here
     }
@@ -101,6 +103,7 @@ private:
     // set use_publisher_timestamps to false to let ROS2 overwrite Time messages associated with this publisher
     bool use_publisher_timestamps;
     MsgType msg_;
+    const QoS* qos_profile;
 };
 
 }
