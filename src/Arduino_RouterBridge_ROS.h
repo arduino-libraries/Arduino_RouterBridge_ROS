@@ -15,5 +15,6 @@
 #include "node.h"
 #include "publisher.h"
 #include "subscriber.h"
+#include "service.h"
 
 #endif //ROUTERBRIDGE_ROS_H

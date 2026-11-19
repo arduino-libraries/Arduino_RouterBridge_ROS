@@ -14,8 +14,14 @@
 
 #define ROUTERBRIDGE_ROS_PUB_MAX 10
 #define ROUTERBRIDGE_ROS_SUB_MAX 10
+#define ROUTERBRIDGE_ROS_SRV_MAX 10
+#define ROUTERBRIDGE_ROS_SRV_CLI_MAX 10
+
+#define ROS2_READY_CALL "ros2/ready"
+#define ROS2_RESET_CALL "ros2/reset"
 
 // types
+// standard
 #include "std_msgs/Bool.h"
 #include "std_msgs/Byte.h"
 #include "std_msgs/ByteMultiArray.h"
@@ -111,16 +117,25 @@
 #include "sensor_msgs/RelativeHumidity.h"
 #include "sensor_msgs/Temperature.h"
 #include "sensor_msgs/TimeReference.h"
+// qos
+#include "qos/QoS.h"
 
 namespace ros2ino
 {
 
     typedef void(*CallBack)(void* msg, void* arg);
 
+    typedef void(*ServiceCallback)(void* req, void* resp, void* arg);
+
     inline bool available()
     {
         bool is_ready = false;
-        return Bridge.call("ros2/ready").result(is_ready) && is_ready;
+        return Bridge.call(ROS2_READY_CALL).result(is_ready) && is_ready;
+    }
+
+    inline bool reset()
+    {
+        return Bridge.call(ROS2_RESET_CALL).result();
     }
 
 }
