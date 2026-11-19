@@ -5,13 +5,15 @@ ros2ino::Publisher<geometry_msgs::msg::Vector3>* pub = nullptr;
 
 void setup() {
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
 
+    while (!ros2ino::available()) {Serial.println("No ROS2 proxy available"); delay(1000);}
+    
     pub = node.create_publisher<geometry_msgs::msg::Vector3>("/vector3");
     if (pub == nullptr) {
-        Monitor.println("Failed to create Vector3 publisher.");
+        Serial.println("Failed to create Vector3 publisher.");
     } else {
-        Monitor.println("Vector3 publisher created.");
+        Serial.println("Vector3 publisher created.");
     }
 }
 

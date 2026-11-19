@@ -12,9 +12,9 @@
 #include <Arduino_RouterBridge_ROS.h>
 
 void chatterCallback(std_msgs::msg::MultiArrayDimension* msg, void* arg) {
-    Serial1.print("I heard: [");
-    Serial1.print(msg->label);
-    Serial1.println("]");
+    Serial.print("I heard: [");
+    Serial.print(msg->label);
+    Serial.println("]");
 
     (void)arg;
 }
@@ -30,17 +30,19 @@ public:
             );
 
         if (subscription_ != nullptr) {
-            Serial1.println("Successfully subscribed!");
+            Serial.println("Successfully subscribed!");
         } else {
-            Serial1.println("Failed to subscribe (List full or Bridge error).");
+            Serial.println("Failed to subscribe (List full or Bridge error).");
         }
     }
 };
 
 void setup() {
-    Serial1.begin(115200);
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
+
+    while (!ros2ino::available()) {Serial.println("No ROS2 proxy available"); delay(1000);}
+
 }
 
 void loop() {
@@ -50,7 +52,7 @@ void loop() {
     static unsigned long last_serial_print = 0;
     if (millis() - last_serial_print > 5000)
     {
-        Monitor.println("mad_sub running");
+        Serial.println("mad_sub running");
         last_serial_print = millis();
     }
 }

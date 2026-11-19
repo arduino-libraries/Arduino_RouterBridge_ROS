@@ -48,7 +48,7 @@ void loop() {
 
     static unsigned long last_serial_print = 0;
     if (millis() - last_serial_print > 5000){
-        Serial.print(ln"string_sub running");
+        Serial.println("string_sub running");
         last_serial_print = millis();
     }
 }

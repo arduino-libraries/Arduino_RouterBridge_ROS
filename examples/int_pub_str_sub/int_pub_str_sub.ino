@@ -17,9 +17,9 @@
 
 // Callback for the subscriber
 void stringCallback(std_msgs::msg::String* msg, void* arg) {
-    Monitor.print("Subscriber received: [");
-    Monitor.print(msg->data.c_str());
-    Monitor.println("]");
+    Serial.print("Subscriber received: [");
+    Serial.print(msg->data.c_str());
+    Serial.println("]");
     (void)arg;
 }
 
@@ -27,8 +27,8 @@ void stringCallback(std_msgs::msg::String* msg, void* arg) {
 void timerCallback(std_msgs::msg::Int32 *msg, void* arg) {
     static int count = 0;
     *msg = count++;
-    Monitor.print("Timer publishing: ");
-    Monitor.println(*msg);
+    Serial.print("Timer publishing: ");
+    Serial.println(*msg);
     (void)arg;
 }
 
@@ -46,13 +46,16 @@ public:
             nullptr
         );
 
-        Monitor.println("Node initialized with Publisher and Subscriber.");
+        Serial.println("Node initialized with Publisher and Subscriber.");
     }
 };
 
 void setup() {
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
+    
+    while (!ros2ino::available()) {Serial.println("No ROS2 proxy available"); delay(1000);}
+    
 }
 
 void loop() {
@@ -62,10 +65,10 @@ void loop() {
     // Process incoming bridge messages and trigger timers
     ros2ino::spin(&node);
 
-    // Heartbeat for the Monitor tool
+    // Heartbeat for the Serial tool
     static unsigned long last_print = 0;
     if (millis() - last_print > 5000) {
-        Monitor.println("Combined node is spinning...");
+        Serial.println("Combined node is spinning...");
         last_print = millis();
     }
 }

@@ -15,9 +15,9 @@ ros2ino::Node myNode("imu_node");
 ros2ino::Publisher<sensor_msgs::msg::Imu>* imu_pub = nullptr;
 
 void setup() {
-    Serial1.begin(115200);
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
+    while (!ros2ino::available()) { Serial.println("No ROS 2 proxy available"); delay(1000); }
 
     // Create the publisher for the IMU topic
     imu_pub = myNode.create_publisher<sensor_msgs::msg::Imu>("/imu/data_raw");

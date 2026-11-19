@@ -7,19 +7,19 @@
 void twistCallback(geometry_msgs::msg::Twist* msg, void* arg) {
     (void)arg;
 
-    Monitor.print("Twist linear:  x=");
-    Monitor.print(msg->linear.x);
-    Monitor.print(" y=");
-    Monitor.print(msg->linear.y);
-    Monitor.print(" z=");
-    Monitor.print(msg->linear.z);
+    Serial.print("Twist linear:  x=");
+    Serial.print(msg->linear.x);
+    Serial.print(" y=");
+    Serial.print(msg->linear.y);
+    Serial.print(" z=");
+    Serial.print(msg->linear.z);
 
-    Monitor.print(" | angular: x=");
-    Monitor.print(msg->angular.x);
-    Monitor.print(" y=");
-    Monitor.print(msg->angular.y);
-    Monitor.print(" z=");
-    Monitor.println(msg->angular.z);
+    Serial.print(" | angular: x=");
+    Serial.print(msg->angular.x);
+    Serial.print(" y=");
+    Serial.print(msg->angular.y);
+    Serial.print(" z=");
+    Serial.println(msg->angular.z);
 }
 
 // --- Publisher timer callback: String ---
@@ -46,16 +46,18 @@ public:
             nullptr
         );
 
-        if (sub != nullptr) Monitor.println("Twist subscribed!");
-        else Monitor.println("Twist subscribe failed.");
+        if (sub != nullptr) Serial.println("Twist subscribed!");
+        else Serial.println("Twist subscribe failed.");
 
-        Monitor.println("String publisher started.");
+        Serial.println("String publisher started.");
     }
 };
 
 void setup() {
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
+    
+    while (!ros2ino::available()) {Serial.println("No ROS2 proxy available"); delay(1000);}
 }
 
 void loop() {
@@ -64,7 +66,7 @@ void loop() {
 
     static unsigned long last = 0;
     if (millis() - last > 5000) {
-        Monitor.println("string_pub_twist_sub running");
+        Serial.println("string_pub_twist_sub running");
         last = millis();
     }
 }

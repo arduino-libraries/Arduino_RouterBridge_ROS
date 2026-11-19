@@ -25,6 +25,8 @@ void setup() {
     Bridge.begin();
     Serial.begin(115200);
 
+    while (!ros2ino::available()) {Serial.println("No ROS2 proxy available"); delay(1000);}
+
     Modulino.begin(Wire1);
     joystick.begin();
 

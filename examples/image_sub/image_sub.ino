@@ -17,30 +17,30 @@ Arduino_LED_Matrix matrix;
 
 // 2. Completed Image Callback
 void imageCallback(sensor_msgs::msg::Image* msg, void* arg) {
-    Monitor.println("image cbk --");
+    Serial.println("image cbk --");
 
-    Monitor.print("image h: ");
-    Monitor.println(msg->height);
-    Monitor.print("image w: ");
-    Monitor.println(msg->width);
-    Monitor.print("enc: ");
-    Monitor.println(msg->encoding);
-    Monitor.println("be: ");
-    Monitor.println(msg->is_bigendian);
-    Monitor.println("step: ");
-    Monitor.println(msg->step);
-    Monitor.print("data size: ");
-    Monitor.println(msg->data.size());
+    Serial.print("image h: ");
+    Serial.println(msg->height);
+    Serial.print("image w: ");
+    Serial.println(msg->width);
+    Serial.print("enc: ");
+    Serial.println(msg->encoding);
+    Serial.println("be: ");
+    Serial.println(msg->is_bigendian);
+    Serial.println("step: ");
+    Serial.println(msg->step);
+    Serial.print("data size: ");
+    Serial.println(msg->data.size());
 
     if (msg->data.empty()) return;
 
     const size_t expected_pixels = 104;
     uint8_t local_frame_buffer[expected_pixels] = {0};
 
-    Monitor.println("img unpacking");
+    Serial.println("img unpacking");
     // Check if we are dealing with the optimized mono1 bitmask
     if (msg->encoding == "mono1") {
-        Monitor.println("mono1 enc");
+        Serial.println("mono1 enc");
         size_t pixel_idx = 0;
         size_t bytes_per_row = msg->step;
 
@@ -60,14 +60,14 @@ void imageCallback(sensor_msgs::msg::Image* msg, void* arg) {
             }
         }
     } else {
-        Monitor.println("mono8 enc");
+        Serial.println("mono8 enc");
         // Fallback for raw mono8 if the buffer size permits it
         size_t pixels_to_copy = (msg->data.size() < expected_pixels) ? msg->data.size() : expected_pixels;
         for (size_t i = 0; i < pixels_to_copy; ++i) {
             local_frame_buffer[i] = msg->data[i] >> 5;
         }
     }
-Monitor.println("drawing");
+    Serial.println("drawing");
     matrix.draw(local_frame_buffer);
 
     (void)arg;
@@ -84,24 +84,25 @@ public:
             );
 
         if (subscription_ != nullptr) {
-            Serial1.println("Subscribed to /matrix_image successfully!");
+            Serial.println("Subscribed to /matrix_image successfully!");
         } else {
-            Serial1.println("Failed to subscribe to image topic.");
+            Serial.println("Failed to subscribe to image topic.");
         }
     }
 };
 
 void setup() {
-    Serial1.begin(115200);
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
+    
+    while (!ros2ino::available()) { Serial.println("No ROS 2 proxy available"); delay(1000); }
 
     // Initialize the LED matrix hardware with 3-bit depth configuration
     matrix.begin();
     matrix.setGrayscaleBits(3);
     matrix.clear();
 
-    Monitor.println("LED Matrix Initialized in 3-bit Grayscale Mode.");
+    Serial.println("LED Matrix Initialized in 3-bit Grayscale Mode.");
 }
 
 void loop() {
@@ -110,7 +111,7 @@ void loop() {
 
     static unsigned long last_serial_print = 0;
     if (millis() - last_serial_print > 5000) {
-        Monitor.println("image_sub node spinning...");
+        Serial.println("image_sub node spinning...");
         last_serial_print = millis();
     }
 }

@@ -5,13 +5,15 @@ ros2ino::Publisher<geometry_msgs::msg::Twist>* pub = nullptr;
 
 void setup() {
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
+
+    while (!ros2ino::available()) {Serial.println("No ROS2 proxy available"); delay(1000);}
 
     pub = node.create_publisher<geometry_msgs::msg::Twist>("/twist_topic");
     if (pub == nullptr) {
-        Monitor.println("Failed to create Twist publisher.");
+        Serial.println("Failed to create Twist publisher.");
     } else {
-        Monitor.println("Twist publisher created.");
+        Serial.println("Twist publisher created.");
     }
 }
 

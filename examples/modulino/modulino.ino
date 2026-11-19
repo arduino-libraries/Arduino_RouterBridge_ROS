@@ -90,9 +90,9 @@ void setLeds(int x){
 }
 
 void intCallback(std_msgs::msg::Int16* msg, void* arg) {
-    Monitor.print("I got data: int ");
-    Monitor.print(msg->data);
-    Monitor.println("");
+    Serial.print("I got data: int ");
+    Serial.print(msg->data);
+    Serial.println("");
     setLeds(msg->data);
     (void)arg;
 }
@@ -108,22 +108,23 @@ public:
             );
 
         if (subscription_ != nullptr) {
-            Monitor.println("Successfully subscribed!");
+            Serial.println("Successfully subscribed!");
         } else {
-            Monitor.println("Failed to subscribe (List full or Bridge error).");
+            Serial.println("Failed to subscribe (List full or Bridge error).");
         }
     }
 };
 
 void setup() {
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
+
+    while (!ros2ino::available()) {Serial.println("No ROS2 proxy available"); delay(1000);}
 
     Modulino.begin(Wire1);
     movement.begin();
     matrix.begin();
     leds.begin();
-
 
     // Create the publisher for the IMU topic
     imu_pub = myNode.create_publisher<sensor_msgs::msg::Imu>("/imu/data_raw");
@@ -144,7 +145,7 @@ void loop() {
     pitch = movement.getPitch();
     yaw = movement.getYaw();
     
-    Monitor.println(String(x)+" "+String(y)+" "+String(z));
+    Serial.println(String(x)+" "+String(y)+" "+String(z));
 
     
 

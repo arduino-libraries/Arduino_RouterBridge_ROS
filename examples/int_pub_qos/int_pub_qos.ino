@@ -36,9 +36,9 @@ public:
 void setup()
 {
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
 
-    if (!ros2ino::available()) {Monitor.println("No ROS2 proxy available"); delay(1000);}
+    while (!ros2ino::available()) {Serial.println("No ROS2 proxy available"); delay(1000);}
 }
 
 void loop()
@@ -49,7 +49,7 @@ void loop()
     static unsigned long last_serial_print = 0;
     if (millis() - last_serial_print > 5000)
     {
-        Monitor.println("int_pub_qos running");
+        Serial.println("int_pub_qos running");
         last_serial_print = millis();
     }
 

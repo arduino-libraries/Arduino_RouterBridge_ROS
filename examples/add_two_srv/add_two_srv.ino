@@ -34,7 +34,7 @@ void setup()
     Bridge.begin();
     Serial.begin(115200);
 
-    if (!ros2ino::available()) {Serial.println("No ROS2 proxy available"); delay(1000);}
+    while (!ros2ino::available()) {Serial.println("No ROS2 proxy available"); delay(1000);}
 }
 
 void loop()

@@ -16,23 +16,23 @@
 #include <Arduino_RouterBridge_ROS.h>
 
 void headerCallback(std_msgs::msg::Header* msg, void* arg) {
-    Monitor.print("I got a header: ");
-    Monitor.print(msg->frame_id);
-    Monitor.print(" - ");
-    Monitor.print("with a timestamp: ");
-    Monitor.print(msg->stamp.sec);
-    Monitor.print(".");
-    Monitor.print(msg->stamp.nanosec);
-    Monitor.println("");
+    Serial.print("I got a header: ");
+    Serial.print(msg->frame_id);
+    Serial.print(" - ");
+    Serial.print("with a timestamp: ");
+    Serial.print(msg->stamp.sec);
+    Serial.print(".");
+    Serial.print(msg->stamp.nanosec);
+    Serial.println("");
 
     if (msg->stamp.sec == 0)
     {
-        Monitor.println("sec == 0");
+        Serial.println("sec == 0");
     }
 
     if (msg->stamp.nanosec == 0)
     {
-        Monitor.println("nanosec == 0");
+        Serial.println("nanosec == 0");
     }
 
     (void)arg;
@@ -49,17 +49,17 @@ public:
             );
 
         if (subscription_ != nullptr) {
-            Serial1.println("Successfully subscribed!");
+            Serial.println("Successfully subscribed!");
         } else {
-            Serial1.println("Failed to subscribe (List full or Bridge error).");
+            Serial.println("Failed to subscribe (List full or Bridge error).");
         }
     }
 };
 
 void setup() {
-    Serial1.begin(115200);
     Bridge.begin();
-    Monitor.begin(115200);
+    Serial.begin(115200);
+    while (!ros2ino::available()) { Serial.println("No ROS 2 proxy available"); delay(1000); }
 }
 
 void loop() {
@@ -69,7 +69,7 @@ void loop() {
     static unsigned long last_serial_print = 0;
     if (millis() - last_serial_print > 5000)
     {
-        Monitor.println("header_sub running");
+        Serial.println("header_sub running");
         last_serial_print = millis();
     }
 }
